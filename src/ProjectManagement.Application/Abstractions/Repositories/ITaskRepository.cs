@@ -4,10 +4,10 @@ namespace ProjectManagement.Application.Abstractions.Repositories;
 
 public interface ITaskRepository
 {
-    Task<TaskItem?> GetByIdAsync(Guid id);
-    Task<List<TaskItem>> GetAllAsync();
-    Task<List<TaskItem>> SearchAsync(string keyword);
-    Task AddAsync(TaskItem task);
-    Task UpdateAsync(TaskItem task);
-    Task DeleteAsync(TaskItem task);
+    Task<TaskItem?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<List<TaskItem>> GetAllAsync(CancellationToken cancellationToken);
+    Task<List<TaskItem>> SearchAsync(string keyword, CancellationToken cancellationToken);
+    Task AddAsync(TaskItem task, CancellationToken cancellationToken);
+    Task UpdateAsync(TaskItem task,CancellationToken cancellationToken);
+    Task DeleteAsync(TaskItem task, CancellationToken cancellationToken);
 }

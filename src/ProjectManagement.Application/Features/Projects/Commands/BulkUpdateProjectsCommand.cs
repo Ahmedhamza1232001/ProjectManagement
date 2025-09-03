@@ -21,13 +21,13 @@ public class BulkUpdateProjectsCommandHandler : IRequestHandler<BulkUpdateProjec
 
         foreach (var dto in request.Projects)
         {
-            var project = await _projectRepository.GetByIdAsync(dto.Id);
+            var project = await _projectRepository.GetByIdAsync(dto.Id,cancellationToken);
             if (project is not null)
             {
                 project.Name = dto.Name;
                 project.Description = dto.Description;
 
-                await _projectRepository.UpdateAsync(project);
+                await _projectRepository.UpdateAsync(project,cancellationToken);
 
                 updated.Add(new ProjectDto(project.Id, project.Name, project.Description));
             }

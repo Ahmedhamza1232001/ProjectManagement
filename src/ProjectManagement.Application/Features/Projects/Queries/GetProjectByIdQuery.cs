@@ -18,7 +18,7 @@ public class GetProjectByIdQueryHandler : IRequestHandler<GetProjectByIdQuery, P
 
     public async Task<ProjectDto> Handle(GetProjectByIdQuery request, CancellationToken cancellationToken)
     {
-        var project = await _projectRepository.GetByIdAsync(request.Id);
+        var project = await _projectRepository.GetByIdAsync(request.Id,cancellationToken);
         if (project is null)
             throw new NotFoundException($"Project with Id {request.Id} not found");
 

@@ -23,6 +23,6 @@ public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserDto
         if (user is null)
             throw new NotFoundException(nameof(User), request.Id);
 
-        return new UserDto(user.Id, user.Username ?? string.Empty, user.Email ?? string.Empty);
+        return new UserDto(user.Id, user.Username ?? string.Empty, user.Email ?? string.Empty,user.PasswordHash);
     }
 }

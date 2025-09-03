@@ -23,7 +23,7 @@ public class UserRepository : IUserRepository
         await _db.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(User user)
+    public async Task DeleteAsync(User user, CancellationToken cancellationToken)
     {
         _db.Users.Remove(user);
         await _db.SaveChangesAsync();

@@ -20,13 +20,13 @@ namespace ProjectManagement.Application.Features.Tasks.Commands
 
         public async Task<TaskDto> Handle(UpdateTaskCommand request, CancellationToken cancellationToken)
         {
-            var task = await _taskRepository.GetByIdAsync(request.Id);
+            var task = await _taskRepository.GetByIdAsync(request.Id, cancellationToken);
             if (task == null) throw new NotFoundException(nameof(TaskItem), request.Id);
 
             task.Title = request.Title;
             task.Description = request.Description;
 
-            await _taskRepository.UpdateAsync(task);
+            await _taskRepository.UpdateAsync(task,cancellationToken);
 
             return new TaskDto(task.Id, task.Title, task.Description??string.Empty, task.ProjectId);
         }

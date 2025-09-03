@@ -17,11 +17,11 @@ public class DeleteProjectCommandHandler : IRequestHandler<DeleteProjectCommand,
 
     public async Task<bool> Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
     {
-        var project = await _projectRepository.GetByIdAsync(request.Id);
+        var project = await _projectRepository.GetByIdAsync(request.Id,cancellationToken);
         if (project is null)
             throw new NotFoundException($"Project with Id {request.Id} not found");
 
-        await _projectRepository.DeleteAsync(project);
+        await _projectRepository.DeleteAsync(project,cancellationToken);
         return true;
     }
 }

@@ -17,7 +17,7 @@ namespace ProjectManagement.Application.Features.Tasks.Queries
 
         public async Task<List<TaskDto>> Handle(SearchTasksQuery request, CancellationToken cancellationToken)
         {
-            var tasks = await _taskRepository.SearchAsync(request.Keyword);
+            var tasks = await _taskRepository.SearchAsync(request.Keyword, cancellationToken);
             return tasks.Select(t => new TaskDto(t.Id, t.Title, t.Description??string.Empty, t.ProjectId)).ToList();
         }
     }

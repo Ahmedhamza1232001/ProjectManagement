@@ -23,6 +23,6 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, UserDto
         if (user is null || user.PasswordHash != request.Password) // ⚠️ Replace with hashing in real life
             throw new UnauthorizedException("Invalid email or password");
 
-        return new UserDto(user.Id, user.Username ?? string.Empty, user.Email ?? string.Empty);
+        return new UserDto(user.Id, user.Username ?? string.Empty, user.Email ?? string.Empty, user.PasswordHash);
     }
 }

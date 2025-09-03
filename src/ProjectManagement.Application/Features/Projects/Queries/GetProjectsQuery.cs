@@ -17,7 +17,7 @@ public class GetProjectsQueryHandler : IRequestHandler<GetProjectsQuery, List<Pr
 
     public async Task<List<ProjectDto>> Handle(GetProjectsQuery request, CancellationToken cancellationToken)
     {
-        var projects = await _projectRepository.GetAllAsync();
+        var projects = await _projectRepository.GetAllAsync(cancellationToken);
         return projects.Select(p => new ProjectDto(p.Id, p.Name, p.Description??string.Empty)).ToList();
     }
 }

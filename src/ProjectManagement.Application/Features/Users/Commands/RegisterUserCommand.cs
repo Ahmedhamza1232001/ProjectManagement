@@ -27,6 +27,6 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, U
 
         await _userRepository.AddAsync(user);
 
-        return new UserDto(user.Id, user.Username, user.Email);
+        return new UserDto(user.Id, user.Username, user.Email,user.PasswordHash);
     }
 }

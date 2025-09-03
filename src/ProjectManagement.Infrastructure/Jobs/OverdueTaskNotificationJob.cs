@@ -14,9 +14,9 @@ public class OverdueTaskNotificationJob
         _emailService = emailService;
     }
 
-    public async Task ExecuteAsync()
+    public async Task ExecuteAsync(CancellationToken cancellationToken)
     {
-        var tasks = await _taskRepository.GetAllAsync();
+        var tasks = await _taskRepository.GetAllAsync(cancellationToken);
         var overdueTasks = tasks.Where(t => t.DueDate < DateTime.UtcNow && t.Status != Domain.Enums.TaskStatus.Completed);
 
         foreach (var task in overdueTasks)

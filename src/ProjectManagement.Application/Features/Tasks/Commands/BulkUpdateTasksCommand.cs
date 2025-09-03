@@ -21,12 +21,12 @@ namespace ProjectManagement.Application.Features.Tasks.Commands
 
             foreach (var dto in request.Tasks)
             {
-                var task = await _taskRepository.GetByIdAsync(dto.Id);
+                var task = await _taskRepository.GetByIdAsync(dto.Id,cancellationToken);
                 if (task != null)
                 {
                     task.Title = dto.Title;
                     task.Description = dto.Description;
-                    await _taskRepository.UpdateAsync(task);
+                    await _taskRepository.UpdateAsync(task,cancellationToken);
 
                     updatedTasks.Add(new TaskDto(task.Id, task.Title, task.Description, task.ProjectId));
                 }

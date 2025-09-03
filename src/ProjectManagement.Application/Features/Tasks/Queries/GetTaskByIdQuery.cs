@@ -18,7 +18,7 @@ namespace ProjectManagement.Application.Features.Tasks.Queries
 
         public async Task<TaskDto> Handle(GetTaskByIdQuery request, CancellationToken cancellationToken)
         {
-            var task = await _taskRepository.GetByIdAsync(request.Id);
+            var task = await _taskRepository.GetByIdAsync(request.Id,cancellationToken);
             if (task == null) throw new NotFoundException(nameof(TaskItem), request.Id);
 
             return new TaskDto(task.Id, task.Title, task.Description??string.Empty, task.ProjectId);

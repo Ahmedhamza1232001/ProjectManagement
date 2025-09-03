@@ -18,14 +18,14 @@ public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand,
 
     public async Task<ProjectDto> Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
     {
-        var project = await _projectRepository.GetByIdAsync(request.Id);
+        var project = await _projectRepository.GetByIdAsync(request.Id,cancellationToken);
         if (project is null)
             throw new NotFoundException($"Project with Id {request.Id} not found");
 
         project.Name = request.Name;
         project.Description = request.Description;
 
-        await _projectRepository.UpdateAsync(project);
+        await _projectRepository.UpdateAsync(project,cancellationToken);
 
         return new ProjectDto(project.Id, project.Name, project.Description);
     }

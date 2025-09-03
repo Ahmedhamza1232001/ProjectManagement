@@ -25,7 +25,7 @@ public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, TaskD
             ProjectId = request.ProjectId
         };
 
-        await _taskRepository.AddAsync(task);
+        await _taskRepository.AddAsync(task,cancellationToken);
 
         return new TaskDto(task.Id, task.Title, task.Description, task.ProjectId);
     }

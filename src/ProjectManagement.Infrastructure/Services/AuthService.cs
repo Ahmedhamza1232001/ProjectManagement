@@ -61,7 +61,7 @@ namespace ProjectManagement.Infrastructure.Services
             return (accessToken, refreshToken);
         }
 
-        public bool ValidateRefreshToken(User user, string refreshToken, CancellationToken cancellationToken = default)
+        public async Task<bool> ValidateRefreshTokenAsync(User user, string refreshToken, CancellationToken cancellationToken = default)
         {
             var token = user.RefreshTokens.Find(t => t.Token == refreshToken);
             return token != null && token.ExpiresAt > DateTime.UtcNow;

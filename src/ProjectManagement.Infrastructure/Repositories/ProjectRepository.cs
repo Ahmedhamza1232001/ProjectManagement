@@ -16,35 +16,35 @@ namespace ProjectManagement.Infrastructure.Repositories
 
         public ProjectRepository(ProjectManagementDbContext db) => _db = db;
 
-        public async Task AddAsync(Project project)
+        public async Task AddAsync(Project project,CancellationToken cancellationToken)
         {
             await _db.Projects.AddAsync(project);
             await _db.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Project project)
+        public async Task UpdateAsync(Project project,CancellationToken cancellationToken)
         {
             _db.Projects.Update(project);
             await _db.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(Project project)
+        public async Task DeleteAsync(Project project,CancellationToken cancellationToken)
         {
             _db.Projects.Remove(project);
             await _db.SaveChangesAsync();
         }
 
-        public async Task<Project?> GetByIdAsync(Guid id)
+        public async Task<Project?> GetByIdAsync(Guid id,CancellationToken cancellationToken)
         {
             return await _db.Projects.FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<IReadOnlyList<Project>> GetAllAsync()
+        public async Task<IReadOnlyList<Project>> GetAllAsync(CancellationToken cancellationToken)
         {
             return await _db.Projects.ToListAsync();
         }
 
-        public async Task<List<Project>> SearchAsync(string keyword)
+        public async Task<List<Project>> SearchAsync(string keyword, CancellationToken cancellationToken)
         {
             return await _db.Projects
                 .Where(p => p.Name.Contains(keyword) || (p.Description ?? string.Empty).Contains(keyword))

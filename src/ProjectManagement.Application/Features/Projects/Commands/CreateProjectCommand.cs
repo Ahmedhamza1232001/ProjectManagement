@@ -22,7 +22,7 @@ public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand,
             Name = request.Name,
             Description = request.Description
         };
-        await _projectRepository.AddAsync(project);
+        await _projectRepository.AddAsync(project,cancellationToken);
 
         return new ProjectDto(project.Id, project.Name, project.Description);
     }
