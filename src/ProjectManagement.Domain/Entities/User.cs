@@ -8,4 +8,5 @@ public class User : BaseEntity
 
     public ICollection<Role> Roles { get; set; } = new List<Role>();
     public ICollection<Project> Projects { get; set; } = new List<Project>();
+    public List<RefreshToken> RefreshTokens { get; set; } = new();
 }

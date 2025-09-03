@@ -7,5 +7,6 @@ public class RefreshToken : BaseEntity
 
     public string Token { get; set; } = default!;
     public DateTime ExpiresAt { get; set; }
+    public bool IsExpired => DateTime.UtcNow >= ExpiresAt;
     public bool Revoked { get; set; }
 }

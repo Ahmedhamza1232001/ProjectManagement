@@ -10,7 +10,7 @@ public class CachingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
 
     public CachingBehavior(IMemoryCache cache)
     {
-        _cache = cache;
+        _cache = cache ?? throw new ArgumentNullException(nameof(cache));
     }
 
     public async Task<TResponse> Handle(
