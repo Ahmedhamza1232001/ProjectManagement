@@ -1,7 +1,3 @@
 namespace ProjectManagement.Application.DTOs.Users;
 
-public class RefreshTokenRequestDto
-{
-    public Guid UserId { get; set; }
-    public string RefreshToken { get; set; } = string.Empty;
-}
+public record RefreshTokenRequestDto(Guid UserId, string RefreshToken);

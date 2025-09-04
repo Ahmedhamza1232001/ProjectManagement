@@ -1,8 +1,10 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Api.Extensions;
 using ProjectManagement.Application;
 using ProjectManagement.Infrastructure;
+using ProjectManagement.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +26,13 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+
+// Run migrations automatically at startup
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ProjectManagementDbContext>();
+    db.Database.Migrate();
 }
 
 app.UseHttpsRedirection();
