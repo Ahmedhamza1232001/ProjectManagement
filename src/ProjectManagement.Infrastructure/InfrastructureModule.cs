@@ -1,8 +1,10 @@
 using Autofac;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using ProjectManagement.Application.Abstractions.Repositories;
 using ProjectManagement.Application.Abstractions.Services;
 using ProjectManagement.Infrastructure.Persistence;
+using ProjectManagement.Infrastructure.Repositories;
 using ProjectManagement.Infrastructure.Services;
 
 namespace ProjectManagement.Infrastructure;
@@ -38,6 +40,18 @@ public class InfrastructureModule : Module
 
         builder.RegisterType<NotificationService>()
                .As<INotificationService>()
+               .InstancePerLifetimeScope();
+
+        builder.RegisterType<UserRepository>()
+          .As<IUserRepository>()
+       .InstancePerLifetimeScope();
+
+        builder.RegisterType<ProjectRepository>()
+               .As<IProjectRepository>()
+               .InstancePerLifetimeScope();
+
+        builder.RegisterType<TaskRepository>()
+               .As<ITaskRepository>()
                .InstancePerLifetimeScope();
         // builder.RegisterType<UserRepository>().As<IUserRepository>().InstancePerLifetimeScope();
     }
