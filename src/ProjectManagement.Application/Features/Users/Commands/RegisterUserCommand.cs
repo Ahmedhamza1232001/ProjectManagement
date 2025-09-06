@@ -2,6 +2,7 @@ using MediatR;
 using ProjectManagement.Application.DTOs.Users;
 using ProjectManagement.Application.Abstractions.Repositories;
 using ProjectManagement.Domain.Entities;
+using BCrypt.Net;
 
 namespace ProjectManagement.Application.Features.Users.Commands;
 
@@ -18,15 +19,21 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, U
 
     public async Task<UserDto> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
+        // Hash the password before saving
+        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
+
         var user = new User
         {
+            Id = Guid.NewGuid(),
             Username = request.Username,
             Email = request.Email,
-            PasswordHash = request.Password // 🔒 (in real apps: hash this!)
+            PasswordHash = hashedPassword
         };
 
-        await _userRepository.AddAsync(user);
+        // Persist user using repository
+        await _userRepository.AddAsync(user,cancellationToken);
 
-        return new UserDto(user.Id, user.Username, user.Email,user.PasswordHash);
+        // Return DTO
+        return new UserDto(user.Id, user.Username, user.Email, user.PasswordHash);
     }
 }

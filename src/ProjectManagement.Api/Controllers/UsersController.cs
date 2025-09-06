@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using ProjectManagement.Application.Abstractions.Services;
+using MediatR;
 using ProjectManagement.Application.DTOs.Users;
+using ProjectManagement.Application.Features.Users.Commands;
+using ProjectManagement.Application.Features.Users.Queries;
 
 namespace ProjectManagement.Api.Controllers;
 
@@ -8,45 +10,46 @@ namespace ProjectManagement.Api.Controllers;
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
 {
-    private readonly IUserService _userService;
+    private readonly IMediator _mediator;
 
-    public UsersController(IUserService userService)
+    public UsersController(IMediator mediator)
     {
-        _userService = userService;
+        _mediator = mediator;
     }
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
     {
-        var user = await _userService.GetByIdAsync(id);
+        var user = await _mediator.Send(new GetUserByIdQuery(id), cancellationToken);
         return user is not null ? Ok(user) : NotFound();
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
-        var users = await _userService.GetAllAsync();
+        var users = await _mediator.Send(new GetUsersQuery(), cancellationToken);
         return Ok(users);
     }
 
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] RegisterUserDto dto, CancellationToken cancellationToken)
     {
-        var user = await _userService.RegisterAsync(dto);
+        var user = await _mediator.Send(new RegisterUserCommand(dto.Username, dto.Email, dto.Password), cancellationToken);
         return CreatedAtAction(nameof(GetById), new { id = user.Id }, user);
     }
+    // need to be fixed 
+    
+    // [HttpPut("{id:guid}")]
+    // public async Task<IActionResult> Update(Guid id, [FromBody] UpdateUserDto dto, CancellationToken cancellationToken)
+    // {
+    //     var updated = await _mediator.Send(new UpdateUserCommand(id, dto.Username, dto.Email), cancellationToken);
+    //     return updated is not null ? NoContent() : NotFound();
+    // }
 
-    [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateUserDto dto, CancellationToken cancellationToken)
-    {
-        var updated = await _userService.UpdateAsync(dto);
-        return updated is not null ? NoContent() : NotFound();
-    }
-
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
-    {
-        await _userService.DeleteAsync(id, cancellationToken);
-        return NoContent();
-    }
+    // [HttpDelete("{id:guid}")]
+    // public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
+    // {
+    //     await _mediator.Send(new DeleteUserCommand(id), cancellationToken);
+    //     return NoContent();
+    // }
 }

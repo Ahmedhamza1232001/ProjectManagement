@@ -11,13 +11,13 @@ public class UserRepository : IUserRepository
 
     public UserRepository(ProjectManagementDbContext db) => _db = db;
 
-    public async Task AddAsync(User user)
+    public async Task AddAsync(User user,CancellationToken cancellationToken)
     {
         await _db.Users.AddAsync(user);
         await _db.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(User user)
+    public async Task UpdateAsync(User user,CancellationToken cancellationToken)
     {
         _db.Users.Update(user);
         await _db.SaveChangesAsync();
@@ -29,12 +29,12 @@ public class UserRepository : IUserRepository
         await _db.SaveChangesAsync();
     }
 
-    public async Task<User?> GetByIdAsync(Guid id)
+    public async Task<User?> GetByIdAsync(Guid id,CancellationToken cancellationToken)
         => await _db.Users.FirstOrDefaultAsync(u => u.Id == id);
 
-    public async Task<List<User>> GetAllAsync()
+    public async Task<List<User>> GetAllAsync(CancellationToken cancellationToken)
         => await _db.Users.ToListAsync();
 
-    public async Task<User?> GetByEmailAsync(string email)
+    public async Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken)
         => await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
 }

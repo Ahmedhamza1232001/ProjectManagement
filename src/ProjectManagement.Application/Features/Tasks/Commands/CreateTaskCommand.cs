@@ -5,7 +5,7 @@ using ProjectManagement.Domain.Entities;
 
 namespace ProjectManagement.Application.Features.Tasks.Commands;
 
-public record CreateTaskCommand(string Title, string Description, Guid ProjectId) : IRequest<TaskDto>;
+public record CreateTaskCommand(string Title, string Description, Guid ProjectId, User AssignedTo) : IRequest<TaskDto>;
 
 public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, TaskDto>
 {
@@ -22,7 +22,8 @@ public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, TaskD
         {
             Title = request.Title,
             Description = request.Description,
-            ProjectId = request.ProjectId
+            ProjectId = request.ProjectId,
+            AssignedTo = request.AssignedTo
         };
 
         await _taskRepository.AddAsync(task,cancellationToken);

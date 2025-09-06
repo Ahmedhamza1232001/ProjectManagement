@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using ProjectManagement.Application.Abstractions.Services;
+using MediatR;
 using ProjectManagement.Application.DTOs.Projects;
+using ProjectManagement.Application.Features.Projects.Commands;
+using ProjectManagement.Application.Features.Projects.Queries;
 
 namespace ProjectManagement.Api.Controllers;
 
@@ -8,44 +10,33 @@ namespace ProjectManagement.Api.Controllers;
 [Route("api/[controller]")]
 public class ProjectsController : ControllerBase
 {
-    private readonly IProjectService _projectService;
+    private readonly IMediator _mediator;
 
-    public ProjectsController(IProjectService projectService)
+    public ProjectsController(IMediator mediator)
     {
-        _projectService = projectService;
+        _mediator = mediator;
     }
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
     {
-        var project = await _projectService.GetByIdAsync(id, cancellationToken);
+        var project = await _mediator.Send(new GetProjectByIdQuery(id), cancellationToken);
         if (project is null) return NotFound();
-
         return Ok(project);
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
-        var projects = await _projectService.GetAllAsync(cancellationToken);
-        var response = projects.Select(p => new ProjectDto(
-        p.Id,
-        p.Name,
-        p.Description
-        ));
-
-        return Ok(response);
+        var projects = await _mediator.Send(new GetProjectsQuery(), cancellationToken);
+        return Ok(projects);
     }
 
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateProjectDto request, CancellationToken cancellationToken)
     {
-        var project = await _projectService.CreateAsync(request, cancellationToken);
+        var project = await _mediator.Send(new CreateProjectCommand(request.Name, request.Description), cancellationToken);
 
-        return CreatedAtAction(nameof(GetById), new { id = project.Id }, new ProjectDto(
-        project.Id,
-        project.Name,
-        project.Description
-    ));
+        return CreatedAtAction(nameof(GetById), new { id = project.Id }, project);
     }
 }

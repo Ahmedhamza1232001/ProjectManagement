@@ -19,7 +19,7 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, UserDto
 
     public async Task<UserDto> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByEmailAsync(request.Email);
+        var user = await _userRepository.GetByEmailAsync(request.Email,cancellationToken);
         if (user is null || user.PasswordHash != request.Password) // ⚠️ Replace with hashing in real life
             throw new UnauthorizedException("Invalid email or password");
 

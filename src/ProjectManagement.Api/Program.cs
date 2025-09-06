@@ -18,7 +18,12 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 
 // Add API-specific services
 builder.Services.AddApiServices();
-
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssembly(typeof(ApplicationModule).Assembly);
+    // Add any pipeline behaviors here if needed
+    // cfg.AddBehavior<ValidationBehavior<,>>();
+});
 var app = builder.Build();
 
 // Middleware pipeline

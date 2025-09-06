@@ -21,7 +21,7 @@ public class AssignRoleCommandHandler : IRequestHandler<AssignRoleCommand, RoleD
 
     public async Task<RoleDto> Handle(AssignRoleCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(request.UserId);
+        var user = await _userRepository.GetByIdAsync(request.UserId,cancellationToken);
         if (user is null)
             throw new NotFoundException(nameof(User), request.UserId);
 
@@ -32,7 +32,7 @@ public class AssignRoleCommandHandler : IRequestHandler<AssignRoleCommand, RoleD
         user.Roles ??= new List<Role>();
         user.Roles.Add(role);
 
-        await _userRepository.UpdateAsync(user);
+        await _userRepository.UpdateAsync(user,cancellationToken);
 
         return new RoleDto(role.Id, role.Name ?? string.Empty);
     }

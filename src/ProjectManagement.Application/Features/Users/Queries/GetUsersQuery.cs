@@ -18,7 +18,7 @@ public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, List<UserDto>
 
     public async Task<List<UserDto>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
     {
-        var users = await _userRepository.GetAllAsync();
+        var users = await _userRepository.GetAllAsync(cancellationToken);
 
         return users
             .Select(u => new UserDto(u.Id, u.Username ?? string.Empty, u.Email ?? string.Empty, u.PasswordHash))
